@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>OORU FIRE - Clash Squad 4v4</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Rajdhani:wght@600;700;800&family=Chakra+Petch:wght@500;700;800&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/assets/index-silver1.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-silver1.css">
+</head>
+<body>
+  <!-- Canvas for 3D Game & Lobby -->
+  <div id="game-container">
+    <canvas id="three-canvas"></canvas>
+  </div>
+
+  <!-- UI Root Container -->
+  <div id="ui-root">
+    
+    <!-- 1. SPLASH SCREEN -->
+    <div id="screen-splash" class="screen active">
+      <div class="splash-particles"></div>
+      <div class="splash-content">
+        
+        <!-- Creative Silver "NA" Logo -->
+        <div class="silver-emblem-wrapper">
+          <div class="silver-shine-ring"></div>
+          <svg class="na-silver-logo" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="silverBase" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="20%" stop-color="#e2e8f0"/>
+                <stop offset="45%" stop-color="#94a3b8"/>
+                <stop offset="65%" stop-color="#f8fafc"/>
+                <stop offset="85%" stop-color="#cbd5e1"/>
+                <stop offset="100%" stop-color="#475569"/>
+              </linearGradient>
+              <linearGradient id="silverBright" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#64748b"/>
+                <stop offset="30%" stop-color="#cbd5e1"/>
+                <stop offset="55%" stop-color="#ffffff"/>
+                <stop offset="85%" stop-color="#e2e8f0"/>
+                <stop offset="100%" stop-color="#475569"/>
+              </linearGradient>
+              <linearGradient id="silverDark" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="#94a3b8"/>
+                <stop offset="50%" stop-color="#334155"/>
+                <stop offset="100%" stop-color="#0f172a"/>
+              </linearGradient>
+              <filter id="silverGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#e2e8f0" flood-opacity="0.8"/>
+              </filter>
+            </defs>
+
+            <!-- Outer Shield Crest -->
+            <polygon points="120,8 218,60 218,180 120,232 22,180 22,60" 
+                     fill="url(#silverDark)" stroke="url(#silverBright)" stroke-width="5" filter="url(#silverGlow)"/>
+            
+            <!-- Inner Facet Inset -->
+            <polygon points="120,22 202,68 202,172 120,218 38,172 38,68" 
+                     fill="#090d16" stroke="url(#silverBase)" stroke-width="2"/>
+
+            <!-- Crest Corner Highlights -->
+            <polygon points="120,8 126,24 114,24" fill="#ffffff"/>
+            <polygon points="120,232 126,216 114,216" fill="#ffffff"/>
+
+            <!-- Interlocking Silver Monogram NA -->
+            <!-- N Left Pillar -->
+            <path d="M 52,172 L 52,68 L 74,68 L 74,172 Z" fill="url(#silverBright)" stroke="#ffffff" stroke-width="1.2"/>
+            <!-- N Diagonal Blade -->
+            <path d="M 74,68 L 96,68 L 138,154 L 116,154 Z" fill="url(#silverBase)" stroke="#ffffff" stroke-width="1.2"/>
+            <!-- A Apex & Left Leg -->
+            <path d="M 116,172 L 152,68 L 174,68 L 138,172 Z" fill="url(#silverBright)" stroke="#ffffff" stroke-width="1.2"/>
+            <!-- A Right Wing / Leg -->
+            <path d="M 174,68 L 196,68 L 204,172 L 182,172 L 176,140 L 140,140 L 136,158 L 148,122 L 168,122 L 174,68 Z" fill="url(#silverBase)" stroke="#ffffff" stroke-width="1.2"/>
+            <!-- Crossbar Accent -->
+            <polygon points="128,138 186,138 182,148 124,148" fill="#ffffff"/>
+          </svg>
+        </div>
+
+        <!-- Name Below: Namma Arena -->
+        <h1 class="namma-arena-title">
+          <span class="silver-text">NAMMA ARENA</span>
+        </h1>
+        
+        <div class="loading-box">
+          <div class="loading-bar-bg silver-bar">
+            <div id="loading-bar" class="loading-bar-fill silver-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. AUTHENTICATION & LOGIN SCREEN -->
+    <div id="screen-login" class="screen">
+      <div class="login-card">
+        
+        <!-- Game Logo Header -->
+        <div class="login-brand">
+          <div class="mini-silver-badge">
+            <svg viewBox="0 0 100 100" class="mini-na-svg">
+              <polygon points="50,4 92,26 92,74 50,96 8,74 8,26" fill="#0f172a" stroke="#cbd5e1" stroke-width="4"/>
+              <path d="M 26,70 L 26,30 L 36,30 L 56,62 L 56,30 L 66,30 L 66,70 L 56,70 L 36,38 L 36,70 Z" fill="#ffffff"/>
+              <path d="M 56,70 L 70,30 L 80,30 L 94,70 L 84,70 L 80,58 L 70,58 L 66,70 Z M 72,50 L 78,50 L 75,39 Z" fill="#94a3b8"/>
+            </svg>
+          </div>
+          <h2 class="login-title">NAMMA ARENA</h2>
+          <p class="login-sub">CHOOSE LOGIN METHOD</p>
+        </div>
+
+        <!-- Login Buttons (Google & Guest) -->
+        <div class="auth-buttons-group">
+          <!-- Google Login Button -->
+          <button id="btn-login-google" class="auth-btn btn-google">
+            <svg class="google-icon" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Sign in with Google</span>
+          </button>
+
+          <!-- Play as Guest Button -->
+          <button id="btn-login-guest" class="auth-btn btn-guest">
+            <span class="guest-icon">👤</span>
+            <span>Play as Guest</span>
+          </button>
+        </div>
+
+        <!-- 18+ Age Policy & Terms (Enabled by default!) -->
+        <div class="policy-section">
+          <div class="policy-checkbox-row">
+            <input type="checkbox" id="chk-age-policy" checked />
+            <label for="chk-age-policy">
+              I confirm that I am <b>18 years of age or older</b> (Age Verification Policy).
+            </label>
+          </div>
+          <div class="policy-checkbox-row">
+            <input type="checkbox" id="chk-terms-policy" checked />
+            <label for="chk-terms-policy">
+              I agree to the <b>Terms of Service</b>, <b>Fair Play Rules</b> & <b>Privacy Policy</b>.
+            </label>
+          </div>
+          <div id="policy-warning" class="policy-warning-msg">
+            ⚠️ Please accept the 18+ Age Policy and Terms of Service to enable Login!
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2B. CHEYYAR 3D CHARACTER CUSTOMIZER SCREEN (Exact match to cheyyar-3d.vercel.app) -->
+    <div id="screen-character" class="screen">
+      
+      <!-- Top Bar: Temple Emblem + Slanted CHARACTER Badge + Google Sign In Link -->
+      <header class="char-topbar">
+        <div class="temple-emblem-badge" title="Cheyyar Heritage">
+          <svg class="temple-gopuram-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 50,6 L 52,18 L 48,18 Z M 38,11 L 40,19 L 36,19 Z M 62,11 L 64,19 L 60,19 Z" fill="#d0d4df"/>
+            <polygon points="34,20 66,20 70,33 30,33" fill="#b2b5be"/>
+            <polygon points="27,35 73,35 77,49 23,49" fill="#898c93"/>
+            <polygon points="20,51 80,51 84,66 16,66" fill="#616368"/>
+            <polygon points="14,68 86,68 88,94 12,94" fill="#353639"/>
+            <path d="M 40,94 L 40,73 C 40,66 60,66 60,73 L 60,94 Z" fill="#f7fcff"/>
+          </svg>
+        </div>
+
+        <div class="char-title-badge">
+          <span class="badge-inner">CHOOSE HERO</span>
+        </div>
+
+        <div class="char-top-right">
+          <button id="btn-char-google-alt" class="google-alt-link">
+            <span>Sign in with Google instead</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Center 3D Stage: Dedicated Character Preview Studio with Outlined CHEYYAR Watermark -->
+      <div class="char-center-stage">
+        <div class="cheyyar-watermark-layer" aria-hidden="true">
+          <div class="cheyyar-watermark-text">CHEYYAR</div>
+        </div>
+        <canvas id="char-preview-canvas"></canvas>
+        <div class="char-drag-hint">DRAG TO ROTATE</div>
+        <button id="hero-prev" class="hero-arrow left" aria-label="Previous hero">◀</button>
+        <button id="hero-next" class="hero-arrow right" aria-label="Next hero">▶</button>
+        <div class="hero-nameplate">
+          <div id="hero-np-name" class="hero-np-name">MANI</div>
+          <div id="hero-np-perk" class="hero-np-perk">IRON BODY · +30 HP</div>
+          <div class="hero-dots"><span class="hero-dot"></span><span class="hero-dot"></span><span class="hero-dot"></span><span class="hero-dot"></span><span class="hero-dot"></span><span class="hero-dot"></span><span class="hero-dot"></span><span class="hero-dot"></span></div>
+        </div>
+      </div>
+
+      <!-- Left Vertical Tab Bar (BODY, HAIR, OUTFIT, TITLE, SAVED) -->
+      <nav class="char-nav-tabs">
+        <button class="nav-tab-btn active" data-tab="hero" title="Choose Hero">
+          <div class="tab-indicator"></div>
+          <div class="tab-icon">🦸</div>
+          <div class="tab-label">HERO</div>
+        </button>
+        <button class="nav-tab-btn" data-tab="body" title="Body & Skin Tone">
+          <div class="tab-indicator"></div>
+          <div class="tab-icon">👤</div>
+          <div class="tab-label">BODY</div>
+        </button>
+        <button class="nav-tab-btn" data-tab="hair" title="Hair & Beard">
+          <div class="tab-indicator"></div>
+          <div class="tab-icon">💇</div>
+          <div class="tab-label">HAIR</div>
+        </button>
+        <button class="nav-tab-btn" data-tab="outfit" title="Hoodie & Joggers">
+          <div class="tab-indicator"></div>
+          <div class="tab-icon">🎽</div>
+          <div class="tab-label">OUTFIT</div>
+        </button>
+        <button class="nav-tab-btn" data-tab="title" title="Title & Badge">
+          <div class="tab-indicator"></div>
+          <div class="tab-icon">🏷️</div>
+          <div class="tab-label">TITLE</div>
+        </button>
+        <button class="nav-tab-btn" data-tab="saved" title="Saved Presets">
+          <div class="tab-indicator"></div>
+          <div class="tab-icon">💾</div>
+          <div class="tab-label">SAVED</div>
+        </button>
+      </nav>
+
+      <!-- Right Customization Panel -->
+      <aside class="char-customise-panel">
+        <div class="panel-header">
+          <div class="panel-heading">
+            <span class="slash-accent">/</span> CUSTOMISE
+          </div>
+          <div class="panel-actions">
+            <button id="btn-char-random" class="char-pill-btn" title="Randomize look">
+              <span class="icon">🎲</span> RANDOM
+            </button>
+            <button id="btn-char-reset" class="char-pill-btn" title="Reset default">
+              <span class="icon">↺</span> RESET
+            </button>
+          </div>
+        </div>
+
+        <div class="panel-content-scroll">
+          
+          <!-- TAB 1: BODY (Skin Tone) -->
+          <!-- TAB 0: HERO SELECT (8 models) -->
+          <div id="tab-pane-hero" class="tab-pane active">
+            <div class="section-title"><span class="slash-accent">/</span> CHOOSE YOUR HERO</div>
+            <div class="hero-grid">
+              <div class="hero-card active" data-hero="mani">
+                <div class="hero-emoji">🥊</div>
+                <div class="hero-card-info"><div class="hero-card-name">MANI</div><div class="hero-card-perk">IRON BODY · +30 HP</div></div>
+              </div>
+              <div class="hero-card" data-hero="karthi">
+                <div class="hero-emoji">⚡</div>
+                <div class="hero-card-info"><div class="hero-card-name">KARTHI</div><div class="hero-card-perk">SPRINTER · +25% move speed</div></div>
+              </div>
+              <div class="hero-card" data-hero="priya">
+                <div class="hero-emoji">🎯</div>
+                <div class="hero-card-info"><div class="hero-card-name">PRIYA</div><div class="hero-card-perk">HEADSHOT · +25% headshot damage</div></div>
+              </div>
+              <div class="hero-card" data-hero="bala">
+                <div class="hero-emoji">🛡️</div>
+                <div class="hero-card-info"><div class="hero-card-name">BALA</div><div class="hero-card-perk">GLOO MASTER · 3 gloo walls per round</div></div>
+              </div>
+              <div class="hero-card" data-hero="raja">
+                <div class="hero-emoji">🔭</div>
+                <div class="hero-card-info"><div class="hero-card-name">RAJA</div><div class="hero-card-perk">Balanced fighter</div></div>
+              </div>
+              <div class="hero-card" data-hero="durai">
+                <div class="hero-emoji">💥</div>
+                <div class="hero-card-info"><div class="hero-card-name">DURAI</div><div class="hero-card-perk">Balanced fighter</div></div>
+              </div>
+              <div class="hero-card" data-hero="senthil">
+                <div class="hero-emoji">🏃</div>
+                <div class="hero-card-info"><div class="hero-card-name">SENTHIL</div><div class="hero-card-perk">Balanced fighter</div></div>
+              </div>
+              <div class="hero-card" data-hero="shankar">
+                <div class="hero-emoji">🦾</div>
+                <div class="hero-card-info"><div class="hero-card-name">SHANKAR</div><div class="hero-card-perk">Balanced fighter</div></div>
+              </div>
+            </div>
+            <div class="hero-hint">Tap a hero or use ◀ ▶ / arrow keys. Colour tabs are optional.</div>
+          </div>
+          <div id="tab-pane-body" class="tab-pane">
+            <div class="section-title">
+              <span class="slash-accent">/</span> SKIN TONE
+            </div>
+            <div class="swatch-grid skin-tone-grid">
+              <button class="swatch-btn" data-color="#f1c9a0" style="background: #f1c9a0;" title="Fair"></button>
+              <button class="swatch-btn" data-color="#d9a577" style="background: #d9a577;" title="Medium Light"></button>
+              <button class="swatch-btn" data-color="#c99a6a" style="background: #c99a6a;" title="Golden Tan"></button>
+              <button class="swatch-btn" data-color="#b07a50" style="background: #b07a50;" title="Warm Bronze"></button>
+              <button class="swatch-btn active" data-color="#8a5a3a" style="background: #8a5a3a;" title="Deep Bronze"></button>
+              <button class="swatch-btn" data-color="#6e4630" style="background: #6e4630;" title="Rich Brown"></button>
+              <button class="swatch-btn" data-color="#54331a" style="background: #54331a;" title="Deep Mocha"></button>
+              <button class="swatch-btn" data-color="#27180e" style="background: #27180e;" title="Espresso"></button>
+            </div>
+          </div>
+
+          <!-- TAB 2: HAIR & BEARD -->
+          <div id="tab-pane-hair" class="tab-pane">
+            <div class="section-title">
+              <span class="slash-accent">/</span> HAIR & BEARD COLOUR
+            </div>
+            <div class="swatch-grid hair-grid">
+              <button class="swatch-btn active" data-hair="#100a06" style="background: #100a06;" title="Jet Black"></button>
+              <button class="swatch-btn" data-hair="#3b2314" style="background: #3b2314;" title="Dark Brown"></button>
+              <button class="swatch-btn" data-hair="#7a4a24" style="background: #7a4a24;" title="Chestnut"></button>
+              <button class="swatch-btn" data-hair="#c9a063" style="background: #c9a063;" title="Golden Blonde"></button>
+              <button class="swatch-btn" data-hair="#9e9e9e" style="background: #9e9e9e;" title="Silver Grey"></button>
+              <button class="swatch-btn" data-hair="#d97706" style="background: #d97706;" title="Amber Gold"></button>
+            </div>
+          </div>
+
+          <!-- TAB 3: OUTFIT (Hoodie & Pants) -->
+          <div id="tab-pane-outfit" class="tab-pane">
+            <div class="section-title">
+              <span class="slash-accent">/</span> HOODIE COLOUR
+            </div>
+            <div class="swatch-grid cloth-grid">
+              <button class="swatch-btn active" data-cloth="#263238" style="background: #263238;" title="Slate Navy"></button>
+              <button class="swatch-btn" data-cloth="#1a3a8a" style="background: #1a3a8a;" title="Royal Blue"></button>
+              <button class="swatch-btn" data-cloth="#1565c0" style="background: #1565c0;" title="Sky Blue"></button>
+              <button class="swatch-btn" data-cloth="#00838f" style="background: #00838f;" title="Teal"></button>
+              <button class="swatch-btn" data-cloth="#2e7d32" style="background: #2e7d32;" title="Forest Green"></button>
+              <button class="swatch-btn" data-cloth="#c62828" style="background: #c62828;" title="Crimson Red"></button>
+              <button class="swatch-btn" data-cloth="#f59e0b" style="background: #f59e0b;" title="Cheyyar Gold"></button>
+              <button class="swatch-btn" data-cloth="#181818" style="background: #181818;" title="Stealth Black"></button>
+            </div>
+
+            <div class="section-title" style="margin-top: 14px;">
+              <span class="slash-accent">/</span> PANT COLOUR
+            </div>
+            <div class="swatch-grid pant-grid">
+              <button class="swatch-btn active" data-pant="#212121" style="background: #212121;" title="Charcoal"></button>
+              <button class="swatch-btn" data-pant="#111827" style="background: #111827;" title="Midnight"></button>
+              <button class="swatch-btn" data-pant="#37474f" style="background: #37474f;" title="Steel Grey"></button>
+              <button class="swatch-btn" data-pant="#1a237e" style="background: #1a237e;" title="Deep Indigo"></button>
+              <button class="swatch-btn" data-pant="#4e342e" style="background: #4e342e;" title="Espresso"></button>
+              <button class="swatch-btn" data-pant="#6d4c41" style="background: #6d4c41;" title="Khaki"></button>
+              <button class="swatch-btn" data-pant="#f5f5f5" style="background: #f5f5f5;" title="White"></button>
+              <button class="swatch-btn" data-pant="#8d6e63" style="background: #8d6e63;" title="Sand"></button>
+            </div>
+          </div>
+
+          <!-- TAB 4: TITLE -->
+          <div id="tab-pane-title" class="tab-pane">
+            <div class="section-title">
+              <span class="slash-accent">/</span> SQUAD BADGE & TITLE
+            </div>
+            <div class="title-cards-list">
+              <div class="title-card active" data-title="CHEYYAR THALA">
+                <div class="title-badge-gold">👑 CHEYYAR THALA</div>
+                <div class="title-desc">Town Legend · High Morale</div>
+              </div>
+              <div class="title-card" data-title="GULLY KING">
+                <div class="title-badge-gold">⚡ GULLY KING</div>
+                <div class="title-desc">Street Ruler · Fast Reflexes</div>
+              </div>
+              <div class="title-card" data-title="ONE TAP GOD">
+                <div class="title-badge-gold">🎯 ONE TAP GOD</div>
+                <div class="title-desc">Precision Shooter · Headshot King</div>
+              </div>
+              <div class="title-card" data-title="GLOO WALL MASTER">
+                <div class="title-badge-gold">🛡️ GLOO WALL MASTER</div>
+                <div class="title-desc">Defensive Specialist · Iron Wall</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: SAVED -->
+          <div id="tab-pane-saved" class="tab-pane">
+            <div class="section-title">
+              <span class="slash-accent">/</span> SAVED PRESETS
+            </div>
+            <div class="saved-preset-slots">
+              <div class="preset-slot">
+                <div class="slot-label">PRESET 1 (CHEYYAR DEFAULT)</div>
+                <div class="slot-info">Mani · Deep Bronze · Cheyyar Gold</div>
+              </div>
+              <div class="preset-slot empty">
+                <div class="slot-label">PRESET 2</div>
+                <div class="slot-info">Empty Slot</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- Bottom Bar: YOUR NAME (E.G. DENESH) + GENDER (MALE/FEMALE) + ▶ ENTER CHEYYAR -->
+      <footer class="char-bottom-bar">
+        <!-- Left: Slanted Nickname Input -->
+        <div class="char-name-container">
+          <div class="char-name-label">YOUR NAME</div>
+          <div class="slanted-input-box">
+            <input type="text" id="input-char-name" maxlength="14" value="DENESH" placeholder="E.G. DENESH" />
+          </div>
+          <div class="char-name-sub">Enter a name (2-14 characters)</div>
+        </div>
+
+        <!-- Center: selected hero chip -->
+        <div class="char-hero-chip"><span class="chip-label">SELECTED HERO</span><span id="chip-hero-name" class="chip-name">MANI</span></div>
+        <!-- Right: ▶ ENTER CHEYYAR Slanted Button -->
+        <div class="char-submit-group">
+          <button id="btn-enter-cheyyar" class="enter-cheyyar-btn">
+            <span class="arrow-icon">▶</span>
+            <span class="btn-text">ENTER CHEYYAR</span>
+          </button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- 3. LOBBY SCREEN -->
+    <div id="screen-lobby" class="screen">
+      <!-- Top Bar -->
+      <header class="lobby-topbar">
+        <div class="player-pill">
+          <div class="avatar-circle" id="lobby-avatar-icon">🥊</div>
+          <div class="player-info">
+            <div class="player-name" id="lobby-player-name">Thunder_Gully</div>
+            <div class="player-level">LVL 32 · HEROIC 👑</div>
+          </div>
+        </div>
+
+        <div class="currencies">
+          <div class="currency-pill gold">
+            <span class="icon">🪙</span>
+            <span id="lobby-coins">8,500</span>
+          </div>
+          <div class="currency-pill diamond">
+            <span class="icon">💎</span>
+            <span id="lobby-diamonds">150</span>
+          </div>
+          <button id="btn-lobby-audio" class="icon-btn" title="Toggle Sound">🔊</button>
+        </div>
+      </header>
+
+      <!-- Center Lobby 3D Stage overlay -->
+      <div class="lobby-body">
+        <!-- Left: Squad Roster -->
+        <div class="squad-panel">
+          <div class="panel-tag">TEAM BLUE · NORTH STREET</div>
+          <div class="squad-slots">
+            <div class="squad-slot player-slot">
+              <span class="badge">LEADER</span>
+              <div class="slot-avatar" id="squad-slot-0-avatar">🥊</div>
+              <div class="slot-details">
+                <span class="slot-name" id="squad-slot-0-name">Thunder_Gully (You)</span>
+                <span class="slot-rank">Heroic · Ready</span>
+              </div>
+            </div>
+            <div class="squad-slot">
+              <span class="badge bot-badge">SQUAD</span>
+              <div class="slot-avatar">⚡</div>
+              <div class="slot-details">
+                <span class="slot-name">Karthi</span>
+                <span class="slot-rank">Diamond IV · Ready</span>
+              </div>
+            </div>
+            <div class="squad-slot">
+              <span class="badge bot-badge">SQUAD</span>
+              <div class="slot-avatar">🎯</div>
+              <div class="slot-details">
+                <span class="slot-name">Priya</span>
+                <span class="slot-rank">Heroic · Ready</span>
+              </div>
+            </div>
+            <div class="squad-slot">
+              <span class="badge bot-badge">SQUAD</span>
+              <div class="slot-avatar">🛡️</div>
+              <div class="slot-details">
+                <span class="slot-name">Bala</span>
+                <span class="slot-rank">Platinum II · Ready</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls-guide">
+            <div class="guide-title">🎮 CONTROLS</div>
+            <div class="guide-grid">
+              <span><b>WASD</b>: Move</span>
+              <span><b>Shift</b>: Sprint</span>
+              <span><b>Space</b>: Jump</span>
+              <span><b>C</b>: Crouch</span>
+              <span><b>Left Click</b>: Fire</span>
+              <span><b>Right Click</b>: Scope</span>
+              <span><b>E</b>: Gloo Wall</span>
+              <span><b>R</b>: Reload</span>
+              <span><b>B</b>: Buy Menu</span>
+              <span><b>M</b>: Medkit</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Mode Details & Start Button -->
+        <div class="lobby-action-box">
+          <div class="mode-card">
+            <div class="mode-tag">4V4 SQUAD WAR</div>
+            <div class="mode-title">CLASH SQUAD: NAMMA OORU</div>
+            <div class="mode-rules">Best of 7 Rounds · 10 Mins · Safe Zone Shrink</div>
+          </div>
+
+          <button id="btn-start-match" class="ff-btn ff-btn-yellow start-match-btn">
+            <div class="btn-sparkle"></div>
+            <span class="btn-main-txt">START MATCH</span>
+            <span class="btn-sub-txt">4v4 CLASH SQUAD</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. MATCHMAKING OVERLAY -->
+    <div id="screen-matchmaking" class="screen">
+      <div class="matchmaking-container">
+        <div class="pulse-radar"></div>
+        <h2 class="mm-title">MATCHMAKING...</h2>
+        <p class="mm-sub">Finding 8 Street Champions for Namma Ooru Arena</p>
+        
+        <div class="vs-teams">
+          <div class="vs-team blue">
+            <h3>TEAM BLUE (NORTH STREET)</h3>
+            <ul id="mm-blue-list">
+              <li>Thunder_Gully (You)</li>
+              <li>Karthi</li>
+              <li>Priya</li>
+              <li>Bala</li>
+            </ul>
+          </div>
+          <div class="vs-badge">VS</div>
+          <div class="vs-team red">
+            <h3>TEAM RED (SOUTH STREET)</h3>
+            <ul id="mm-red-list">
+              <li>Raja (Sniper)</li>
+              <li>Durai (Shotgun)</li>
+              <li>Senthil (Rusher)</li>
+              <li>Shankar (Tank)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mm-countdown" id="mm-countdown-text">MATCH STARTING IN 3...</div>
+      </div>
+    </div>
+
+    <!-- 5. IN-GAME HUD -->
+    <div id="screen-game" class="screen">
+      <!-- Crosshair / Reticle -->
+      <div id="reticle">
+        <div class="reticle-dot"></div>
+        <div class="reticle-line top"></div>
+        <div class="reticle-line bottom"></div>
+        <div class="reticle-line left"></div>
+        <div class="reticle-line right"></div>
+        <div id="hit-marker" class="hit-marker">✕</div>
+      </div>
+
+      <!-- Scope Overlay for Snipers -->
+      <div id="scope-overlay" class="scope-overlay">
+        <div class="scope-lens">
+          <div class="scope-cross-h"></div>
+          <div class="scope-cross-v"></div>
+          <div class="scope-mil-dots"></div>
+        </div>
+      </div>
+
+      <!-- Top Scoreboard Bar -->
+      <div class="hud-top">
+        <div class="scoreboard">
+          <div class="team-score blue-team">
+            <span class="team-name">BLUE</span>
+            <span class="score-num" id="hud-blue-score">0</span>
+            <div class="score-pips" id="blue-pips">
+              <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
+            </div>
+          </div>
+          
+          <div class="round-center">
+            <div class="round-num" id="hud-round-label">ROUND 1 / 7</div>
+            <div class="round-timer" id="hud-round-timer">01:30</div>
+            <div class="alive-stats">
+              <span class="alive-blue">💙 <b id="hud-blue-alive">4</b> ALIVE</span>
+              <span class="alive-vs">vs</span>
+              <span class="alive-red">🔴 <b id="hud-red-alive">4</b> ALIVE</span>
+            </div>
+          </div>
+
+          <div class="team-score red-team">
+            <span class="team-name">RED</span>
+            <span class="score-num" id="hud-red-score">0</span>
+            <div class="score-pips" id="red-pips">
+              <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kill Feed -->
+        <div class="killfeed" id="killfeed"></div>
+      </div>
+
+      <!-- Buy Phase Announcement & Timer -->
+      <div id="buy-phase-banner" class="buy-phase-banner">
+        <div class="banner-title">BUY PHASE</div>
+        <div class="banner-sub">BARRIERS LOWER IN <span id="buy-phase-timer">12</span>s</div>
+        <button id="btn-open-shop" class="ff-btn ff-btn-yellow small-btn">OPEN SHOP [B]</button>
+      </div>
+
+      <!-- Zone Warning Alert -->
+      <div id="zone-warning" class="zone-warning">
+        ⚠️ DANGER: SAFE ZONE IS SHRINKING! GET INSIDE THE CIRCLE!
+      </div>
+
+      <!-- Floating Damage Numbers Container -->
+      <div id="damage-numbers-layer"></div>
+
+      <!-- Bottom HUD: Player Health, Armor, Weapon, Skills -->
+      <div class="hud-bottom">
+        <!-- Left: HP & Armor -->
+        <div class="status-bars">
+          <div class="bar-row armor-row">
+            <span class="bar-label">ARMOR</span>
+            <div class="bar-track">
+              <div id="bar-armor" class="bar-fill armor" style="width: 100%;"></div>
+            </div>
+            <span class="bar-val" id="val-armor">100 / 100</span>
+          </div>
+          <div class="bar-row hp-row">
+            <span class="bar-label">HP</span>
+            <div class="bar-track">
+              <div id="bar-hp" class="bar-fill hp" style="width: 100%;"></div>
+            </div>
+            <span class="bar-val" id="val-hp">200 / 200</span>
+          </div>
+          <div class="hero-skill-status">
+            <span class="skill-icon">⚡</span>
+            <span id="skill-display">IRON BODY ACTIVE</span>
+          </div>
+        </div>
+
+        <!-- Center: Quick Consumables (Gloo Wall + Medkit) -->
+        <div class="hud-quick-items">
+          <button id="btn-quick-gloo" class="quick-item-btn gloo" title="Deploy Gloo Wall [E]">
+            <span class="item-icon">🛡️</span>
+            <span class="item-name">GLOO WALL</span>
+            <span class="item-count" id="hud-gloo-count">x2</span>
+            <span class="keybind">[E]</span>
+          </button>
+          <button id="btn-quick-medkit" class="quick-item-btn med" title="Use Medkit [M]">
+            <span class="item-icon">➕</span>
+            <span class="item-name">MEDKIT</span>
+            <span class="item-count" id="hud-med-count">x1</span>
+            <span class="keybind">[M]</span>
+          </button>
+        </div>
+
+        <!-- Right: Current Weapon & Ammo -->
+        <div class="weapon-hud">
+          <div class="weapon-info">
+            <div class="weapon-name" id="hud-weapon-name">M1887 SHOTGUN</div>
+            <div class="ammo-display">
+              <span class="ammo-clip" id="hud-ammo-clip">2</span>
+              <span class="ammo-slash">/</span>
+              <span class="ammo-reserve" id="hud-ammo-reserve">24</span>
+            </div>
+          </div>
+          <button id="btn-quick-reload" class="reload-btn" title="Reload [R]">RELOAD [R]</button>
+        </div>
+      </div>
+
+      <!-- Mobile Touch Controls (Shown on Touch Devices) -->
+      <div id="mobile-controls" class="mobile-controls">
+        <div id="touch-joystick-zone" class="touch-joystick-zone">
+          <div id="touch-joystick-thumb" class="touch-joystick-thumb"></div>
+        </div>
+        <div class="touch-action-buttons">
+          <button id="touch-btn-fire" class="touch-btn fire-btn">🔥</button>
+          <button id="touch-btn-jump" class="touch-btn jump-btn">🦘</button>
+          <button id="touch-btn-crouch" class="touch-btn crouch-btn">🧎</button>
+          <button id="touch-btn-scope" class="touch-btn scope-btn">🎯</button>
+          <button id="touch-btn-gloo" class="touch-btn gloo-btn">🛡️</button>
+          <button id="touch-btn-reload" class="touch-btn reload-btn">🔄</button>
+          <button id="touch-btn-medkit" class="touch-btn medkit-btn" aria-label="Use medkit">➕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. CLASH SQUAD BUY MENU (SHOP) -->
+    <div id="modal-shop" class="modal-backdrop">
+      <div class="shop-window">
+        <div class="shop-header">
+          <div class="shop-title">CLASH SQUAD ARMORY SHOP</div>
+          <div class="shop-cash">FUNDS: <span class="cash-amount" id="shop-coins">$1,500</span></div>
+          <button id="btn-close-shop" class="btn-close">✕</button>
+        </div>
+
+        <div class="shop-body">
+          <div class="shop-category">
+            <h3>PISTOLS</h3>
+            <div class="shop-grid">
+              <div class="shop-item" data-item="desert_eagle">
+                <div class="item-pic">🔫</div>
+                <div class="item-name">Desert Eagle</div>
+                <div class="item-stat">Heavy Pistol · High Headshot Dmg</div>
+                <button class="btn-buy" data-cost="500">$500</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="shop-category">
+            <h3>SMG & SHOTGUN</h3>
+            <div class="shop-grid">
+              <div class="shop-item" data-item="mp40">
+                <div class="item-pic">⚡</div>
+                <div class="item-name">MP40</div>
+                <div class="item-stat">Rapid SMG · Close Combat Dominance</div>
+                <button class="btn-buy" data-cost="1500">$1,500</button>
+              </div>
+              <div class="shop-item" data-item="m1887">
+                <div class="item-pic">💥</div>
+                <div class="item-name">M1887</div>
+                <div class="item-stat">Double Barrel Shotgun · 1-Tap King</div>
+                <button class="btn-buy" data-cost="1700">$1,700</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="shop-category">
+            <h3>RIFLES & SNIPER</h3>
+            <div class="shop-grid">
+              <div class="shop-item" data-item="ak47">
+                <div class="item-pic">🎯</div>
+                <div class="item-name">AK-47</div>
+                <div class="item-stat">Assault Rifle · Devastating Damage</div>
+                <button class="btn-buy" data-cost="1800">$1,800</button>
+              </div>
+              <div class="shop-item" data-item="awm">
+                <div class="item-pic">🔭</div>
+                <div class="item-name">AWM Sniper</div>
+                <div class="item-stat">High Powered Scope · Instant Knock</div>
+                <button class="btn-buy" data-cost="2200">$2,200</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="shop-category">
+            <h3>UTILITY & ARMOR</h3>
+            <div class="shop-grid">
+              <div class="shop-item" data-item="vest">
+                <div class="item-pic">🦺</div>
+                <div class="item-name">Kevlar Vest Lvl 3</div>
+                <div class="item-stat">+100 Armor · 50% Dmg Reduction</div>
+                <button class="btn-buy" data-cost="800">$800</button>
+              </div>
+              <div class="shop-item" data-item="gloo">
+                <div class="item-pic">🛡️</div>
+                <div class="item-name">Gloo Wall Grenade</div>
+                <div class="item-stat">Instant Bulletproof Barrier</div>
+                <button class="btn-buy" data-cost="300">$300</button>
+              </div>
+              <div class="shop-item" data-item="medkit">
+                <div class="item-pic">➕</div>
+                <div class="item-name">First Aid Medkit</div>
+                <div class="item-stat">Restores +75 HP</div>
+                <button class="btn-buy" data-cost="300">$300</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="shop-footer">
+          <p>Press <b>[B]</b> or click Close to exit. Shop closes when barriers lower.</p>
+          <button id="btn-shop-ready" class="ff-btn ff-btn-yellow">READY FOR BATTLE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. ROUND RESULT BANNER (SLOW MOTION OVERLAY) -->
+    <div id="round-result-banner" class="round-result-banner">
+      <div class="round-outcome" id="round-outcome-text">ROUND VICTORY!</div>
+      <div class="round-outcome-sub" id="round-outcome-sub">ALL ENEMIES ELIMINATED</div>
+    </div>
+
+    <!-- 8. MATCH END / BOOYAH SCREEN -->
+    <div id="screen-gameover" class="screen">
+      <div class="gameover-card">
+        <div class="booyah-banner" id="gameover-banner">
+          <span class="booyah-star">★</span>
+          <span class="booyah-title" id="gameover-title">BOOYAH!</span>
+          <span class="booyah-star">★</span>
+        </div>
+        <div class="gameover-sub" id="gameover-sub">NORTH STREET CHAMPIONS</div>
+
+        <div class="match-stats-table">
+          <div class="stat-box">
+            <span class="stat-num" id="stat-kills">7</span>
+            <span class="stat-lbl">KILLS</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="stat-headshots">4</span>
+            <span class="stat-lbl">HEADSHOTS</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="stat-damage">1,850</span>
+            <span class="stat-lbl">DAMAGE</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="stat-mvp">MVP 👑</span>
+            <span class="stat-lbl">RATING</span>
+          </div>
+        </div>
+
+        <div class="gameover-actions">
+          <button id="btn-play-again" class="ff-btn ff-btn-yellow">
+            <span>PLAY AGAIN</span>
+          </button>
+          <button id="btn-return-lobby" class="ff-btn ff-btn-outline">
+            <span>RETURN TO LOBBY</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

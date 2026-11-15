@@ -1,0 +1,7 @@
+{ "rules": {
+  "users":   { ".read": "auth != null", "$u": { ".write": "auth.uid === $u" } },
+  "codes":   { ".read": "auth != null", "$c": { ".write": "auth != null" } },
+  "friends": { "$a": { ".read": "auth.uid === $a", "$b": { ".write": "auth.uid === $a || auth.uid === $b" } } },
+  "invites": { "$u": { ".read": "auth.uid === $u", ".write": "auth != null", "$i": { ".write": "auth != null" } } },
+  "pc":      { ".read": "auth != null", ".write": "auth != null", ".indexOn": ["ts"] }
+} }
