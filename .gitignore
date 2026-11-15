@@ -1,0 +1,20 @@
+# Android / Capacitor (APK files git-ku poga koodathu)
+android/
+ios/
+.gradle/
+.idea/
+local.properties
+*.apk
+*.aab
+*.keystore
+*.jks
+google-services.json
+
+# Node
+node_modules/
+
+# Misc
+.vercel/
+.env
+.env.*
+.DS_Store
