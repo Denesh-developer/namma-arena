@@ -251,3 +251,79 @@ html,body{overscroll-behavior:none;-webkit-text-size-adjust:100%;text-size-adjus
     touch-action:pan-y;
   }
 }
+
+/* ===== v16 FIX: make the entire mobile armory content one scroll surface =====
+   The previous nested .ff-list / .ff-detail scroll areas could trap touch
+   scrolling on phones and leave the BUY button below the visible viewport.
+   On touch/mobile, stack the list and detail vertically and scroll the
+   complete shop content as one native touch-scrolling region. */
+@media (pointer:coarse), (max-width:900px){
+  #modal-shop .shop-window{
+    height:94dvh!important;
+    max-height:94dvh!important;
+    min-height:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+  }
+  #modal-shop .shop-header{flex:0 0 auto!important}
+  #modal-shop .ff-shop{
+    display:flex!important;
+    flex:1 1 auto!important;
+    flex-direction:column!important;
+    min-height:0!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:contain!important;
+    touch-action:pan-y!important;
+    scrollbar-width:thin;
+  }
+  #modal-shop .ff-tabs{
+    flex:0 0 auto!important;
+    position:sticky!important;
+    top:0!important;
+    z-index:2!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    max-width:100%!important;
+    touch-action:pan-x pan-y!important;
+  }
+  #modal-shop .ff-main{
+    display:flex!important;
+    flex:0 0 auto!important;
+    flex-direction:column!important;
+    min-height:0!important;
+    overflow:visible!important;
+  }
+  #modal-shop .ff-list{
+    display:flex!important;
+    flex:0 0 auto!important;
+    flex-direction:column!important;
+    width:100%!important;
+    max-height:none!important;
+    min-height:0!important;
+    overflow:visible!important;
+    padding:8px 10px!important;
+    touch-action:pan-y!important;
+  }
+  #modal-shop .ff-detail{
+    display:flex!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    min-height:0!important;
+    overflow:visible!important;
+    padding:12px 16px 18px!important;
+    touch-action:pan-y!important;
+  }
+  #modal-shop .ff-dpic{height:90px!important;flex:0 0 90px!important}
+  #modal-shop .ff-buy{
+    align-self:center!important;
+    width:min(100%,360px)!important;
+    min-height:48px!important;
+    margin:12px 0 8px!important;
+    touch-action:manipulation!important;
+    position:relative!important;
+    z-index:3!important;
+  }
+}
