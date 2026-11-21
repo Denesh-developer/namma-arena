@@ -8,6 +8,18 @@ const policyOk=()=>{const a=$('chk-age-policy'),b=$('chk-terms-policy');return !
 const nameOf=u=>((u.displayName||'').trim()||(u.email||'').split('@')[0]||'PLAYER').slice(0,14);
 let busy=false;
 
+// ---- Capacitor (Android APK): WebView-la popup work aagathu -> native Google sign-in ----
+const cap=window.Capacitor;
+const isNative=!!(cap&&cap.isNativePlatform&&cap.isNativePlatform());
+const nativeAuth=()=>cap&&cap.Plugins&&cap.Plugins.FirebaseAuthentication;
+async function nativeCredential(A){
+ const P=nativeAuth();if(!P)throw {code:'native-plugin-missing'};
+ const r=await P.signInWithGoogle();               // skipNativeAuth:true -> returns tokens only
+ const idToken=r&&r.credential&&r.credential.idToken;
+ if(!idToken)throw {code:'no-id-token'};
+ return A.GoogleAuthProvider.credential(idToken);  // handed to the web SDK so online.js/cloud.js keep working
+}
+
 async function proceed(u){
  const C=window.__cloud;
  if(C&&await C.enter())return;          // returning player: saved name/character -> straight to lobby
@@ -26,16 +38,18 @@ btn.addEventListener('click',async e=>{
  busy=true;lbl&&(lbl.textContent='Signing in...');
  try{
   const prov=new A.GoogleAuthProvider();prov.setCustomParameters({prompt:'select_account'});
-  try{u=(u?await A.linkWithPopup(u,prov):await A.signInWithPopup(auth,prov)).user}
+  const nCred=isNative?await nativeCredential(A):null;
+  try{u=(nCred?(u?await A.linkWithCredential(u,nCred):await A.signInWithCredential(auth,nCred)):(u?await A.linkWithPopup(u,prov):await A.signInWithPopup(auth,prov))).user}
   catch(err){
    if(err.code==='auth/credential-already-in-use'||err.code==='auth/email-already-in-use'){
-    const cred=A.GoogleAuthProvider.credentialFromError(err);
+    const cred=nCred||A.GoogleAuthProvider.credentialFromError(err);
     if(cred){await A.signInWithCredential(auth,cred);try{window.__cloud&&await window.__cloud.load()}catch(e){}location.reload();return}   // existing account: reload so online.js uses its uid
    }
    throw err}
  await proceed(u);
  }catch(err){
-  if(err.code!=='auth/popup-closed-by-user'&&err.code!=='auth/cancelled-popup-request')
+  const msg=String((err&&err.message)||'').toLowerCase();
+  if(err.code!=='auth/popup-closed-by-user'&&err.code!=='auth/cancelled-popup-request'&&!/cancel/.test(msg))
    toast('Google login fail: '+(err.code==='auth/unauthorized-domain'?'domain Firebase-la authorize pannala':err.code==='auth/operation-not-allowed'?'Google provider enable pannala':(err.code||err.message)));
  }finally{busy=false;lbl&&(lbl.textContent=orig);paint()}
 },true);
@@ -48,5 +62,6 @@ const t=setInterval(()=>{if(window.__fb){clearInterval(t);paint()}},300);
 // logout also signs out of Google
 const lo=$('btn-logout');
 lo&&lo.addEventListener('click',()=>{const F=window.__fb,u=F&&F.auth.currentUser;
+ try{isNative&&nativeAuth()&&nativeAuth().signOut()}catch(_){}
  if(u&&!u.isAnonymous)(window.__cloud?window.__cloud.flushAndClear():Promise.resolve()).catch(()=>{}).then(()=>F.A.signOut(F.auth)).finally(()=>setTimeout(()=>location.reload(),250))},true);
 })();

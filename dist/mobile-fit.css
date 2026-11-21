@@ -194,3 +194,60 @@ html,body{overscroll-behavior:none;-webkit-text-size-adjust:100%;text-size-adjus
   #lobby-nameplate .np-rank{font-size:11px!important}
   html body .lm-mate{font-size:13px!important}
 }
+
+/* ===== FIX: mobile armory shop touch scrolling =====
+   Keep the existing shop layout and purchase logic. Give the two
+   dynamically-created shop panes a constrained flex height and native
+   vertical touch scrolling so swipe gestures work inside the shop. */
+@media (pointer: coarse), (max-width: 900px){
+  #modal-shop .shop-window{
+    min-height:0!important;
+    max-height:94dvh!important;
+  }
+  #modal-shop .ff-shop{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  #modal-shop .ff-main{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  #modal-shop .ff-list,
+  #modal-shop .ff-detail{
+    min-height:0!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:contain;
+    touch-action:pan-y;
+    scrollbar-width:thin;
+  }
+  #modal-shop .ff-list{
+    flex:0 0 40%!important;
+  }
+  #modal-shop .ff-row,
+  #modal-shop .ff-tab,
+  #modal-shop .ff-buy{
+    touch-action:manipulation;
+  }
+}
+
+@media (max-height:520px) and (pointer:coarse){
+  #modal-shop .shop-window{
+    height:94dvh!important;
+    max-height:94dvh!important;
+  }
+  #modal-shop .ff-shop,
+  #modal-shop .ff-main{
+    min-height:0!important;
+  }
+  #modal-shop .ff-list,
+  #modal-shop .ff-detail{
+    min-height:0!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-y;
+  }
+}
